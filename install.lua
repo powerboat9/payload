@@ -41,5 +41,5 @@ shell.dir = function()
 end
 
 _G.fs.combine = function(s1, s2)
-    old.combine(old.dir, old.combine(s1, s2))
+    old.combine(old.dir(), old.combine(s1, s2))
 end
