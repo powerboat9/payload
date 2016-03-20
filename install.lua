@@ -8,7 +8,14 @@ fs.makeDir(sandDir)
 
 for _, v in pairs(fs.list("/")) do
     --print(v)
-    if (v ~= (sandDir:sub(2, -1))) and (v ~= payload) and (not fs.isReadOnly("/" .. v)) then
+    local diskList = {}
+    for _, side in pairs(rs.getSides()) do
+        if peripheral.getName(side) == "drive" then
+            local mount = peripheral.call(side, "getMountPath")
+            diskList[mount] = true
+        end
+    end
+    if (v ~= (sandDir:sub(2, -1))) and (v ~= payload) and (not fs.isReadOnly("/" .. v)) and (not diskList[v]) then
         print("Doing " .. v .. " to " .. sandDir .. "/" .. v)
         fs.move("/" .. v, sandDir .. "/" .. v)
     end
