@@ -26,7 +26,7 @@ shell.setDir = function(s)
 end
 
 shell.dir = function()
-    return (old.dir()):sub((10, -1))
+    return (old.dir()):sub(10, -1)
 end
 
 _G.fs.combine = function(s1, s2)
