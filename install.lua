@@ -10,7 +10,9 @@ for _, v in pairs(fs.list("/")) do
     if (v ~= sandDir) and (v ~= payload) and (not fs.isReadOnly("/" .. v)) then
         fs.move("/" .. v, sandDir .. "/" .. v)
     end
-    fs.move(sandDir, "/sand")
+    if sandDir ~= "/sand" then
+        fs.move(sandDir, "/sand")
+    end
 end
 
 shell.setDir("/sand")
