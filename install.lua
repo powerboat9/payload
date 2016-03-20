@@ -32,7 +32,8 @@ shell.setDir("/sand")
 local old = {
     setDir = shell.setDir,
     dir = shell.dir,
-    combine = fs.combine
+    combine = fs.combine,
+    ls = fs.list
 }
 
 shell.setDir = function(s)
@@ -50,4 +51,8 @@ _G.fs.combine = function(s1, s2)
     local returning = old.combine(old.dir(), old.combine(s1, s2))
     print(returning)
     return returning
+end
+
+_G.fs.list = function(p)
+    return old.combine("/sand", p)
 end
