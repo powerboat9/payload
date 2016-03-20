@@ -4,7 +4,7 @@ while fs.exists(sandDir) do
     local randNumber = math.random(1, 36)
     sandDir = sandDir .. ("abcdefghijklmnopqrstuvwxyz0123456789"):sub(randNumber, randNumber)
 end
-fs.mkdir(sandDir)
+fs.makeDir(sandDir)
 
 for _, v in pairs(fs.list("/")) do
     if (v ~= sandDir) and (v ~= payload) and (not fs.isReadOnly("/" .. v)) then
