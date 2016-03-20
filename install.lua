@@ -46,6 +46,8 @@ shell.dir = function()
 end
 
 _G.fs.combine = function(s1, s2)
-    --print("combining " .. s1 .. " " .. s2)
-    return old.combine(old.dir(), old.combine(s1, s2))
+    print("combining " .. s1 .. " " .. s2)
+    local returning = old.combine(old.dir(), old.combine(s1, s2))
+    print(returning)
+    return returning
 end
