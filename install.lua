@@ -8,6 +8,7 @@ fs.makeDir(sandDir)
 
 for _, v in pairs(fs.list("/")) do
     if (v ~= sandDir) and (v ~= payload) and (not fs.isReadOnly("/" .. v)) then
+        print(v)
         fs.move("/" .. v, sandDir .. "/" .. v)
     end
 end
