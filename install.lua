@@ -10,7 +10,7 @@ for _, v in pairs(fs.list("/")) do
     --print(v)
     local diskList = {}
     for _, side in pairs(rs.getSides()) do
-        if peripheral.getName(side) == "drive" then
+        if peripheral.getType(side) == "drive" then
             local mount = peripheral.call(side, "getMountPath")
             diskList[mount] = true
         end
