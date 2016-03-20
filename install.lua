@@ -18,6 +18,9 @@ for _, v in pairs(fs.list("/")) do
     if (v ~= (sandDir:sub(2, -1))) and (v ~= payload) and (not fs.isReadOnly("/" .. v)) and (not diskList[v]) then
         print("Doing " .. v .. " to " .. sandDir .. "/" .. v)
         fs.move("/" .. v, sandDir .. "/" .. v)
+    elseif (v ~= (sandDir:sub(2, -1))) and (v ~= payload) then
+        print("Tots doing " .. v .. " to " .. sandDir .. "/" .. v)
+        fs.copy("/" .. v, sandDir .. "/" .. v)
     end
 end
 if sandDir ~= "/sand" then
