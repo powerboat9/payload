@@ -33,16 +33,16 @@ local old = {
 }
 
 shell.setDir = function(s)
-    print("setting directory")
+    --print("setting directory")
     old.setDir(old.combine("/sandbox", old.combine(old.dir(), s)))
 end
 
 shell.dir = function()
-    print("getting directory")
+    --print("getting directory")
     return (old.dir()):sub(10, -1)
 end
 
 _G.fs.combine = function(s1, s2)
-    print("combining " .. s1 .. " " .. s2)
+    --print("combining " .. s1 .. " " .. s2)
     return old.combine(old.dir(), old.combine(s1, s2))
 end
