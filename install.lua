@@ -33,7 +33,7 @@ local old = {
 }
 
 shell.setDir = function(s)
-    old.setDir(old.combine("/sandbox", fs.combine(old.dir(), s)))
+    old.setDir(old.combine("/sandbox", old.combine(old.dir(), s)))
 end
 
 shell.dir = function()
@@ -41,5 +41,5 @@ shell.dir = function()
 end
 
 _G.fs.combine = function(s1, s2)
-    old.combine(old.dir, fs.combine(s1, s2))
+    old.combine(old.dir, old.combine(s1, s2))
 end
