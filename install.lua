@@ -56,5 +56,9 @@ _G.fs.combine = function(s1, s2)
 end
 
 _G.fs.list = function(p)
-    return old.combine("/sand", p)
+    local list = old.ls(p)
+    for k, v in ipairs(list) do
+        list[k] = old.combine("/sand", v)
+    end
+    return list
 end
