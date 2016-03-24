@@ -32,18 +32,20 @@ shell.setDir("/sand")
 local old = {
     setDir = shell.setDir,
     dir = shell.dir,
-    combine = fs.combine,
-    ls = fs.list
+    combine = _G.fs.combine,
+    ls = _G.fs.list,
+    setmetatable = _G.setmetatable,
+    getmetatable = _G.getmetatable
 }
 
 shell.setDir = function(s)
     --print("setting directory")
-    old.setDir(old.combine("/sandbox", old.combine(old.dir(), s)))
+    old.setDir(old.combine("/sand", old.combine(old.dir(), s)))
 end
 
 shell.dir = function()
     --print("getting directory")
-    return (old.dir()):sub(10, -1)
+    return (old.dir()):sub(5, -1)
 end
 
 _G.fs.combine = function(s1, s2)
@@ -62,3 +64,20 @@ _G.fs.list = function(p)
     end
     return list
 end
+
+local fakeMeta = nil
+local env = {}
+
+_G.setmetatable = function(t, m)
+    if t == env then
+        fakeMeta = m
+    else
+        old.setmetatable(t, m)
+    end
+end
+
+--Does some modification protection
+old.setmetatable(env, {
+    __index = function(...)
+        fakeMeta.__index(args)
+    __})
