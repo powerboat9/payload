@@ -76,8 +76,10 @@ _G.setmetatable = function(t, m)
     end
 end
 
---Does some modification protection
+env._G = env
+
 old.setmetatable(env, {
-    __index = function(...)
-        fakeMeta.__index(args)
-    __})
+    __index = function(t, k)
+        return _G[k] or fakeMeta.__index(t, k)
+    end
+})
