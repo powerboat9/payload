@@ -38,17 +38,19 @@ local old = {
     getmetatable = _G.getmetatable
 }
 
-shell.setDir = function(s)
+local env = {}
+
+env.shell.setDir = function(s)
     --print("setting directory")
     old.setDir(old.combine("/sand", old.combine(old.dir(), s)))
 end
 
-shell.dir = function()
+env.shell.dir = function()
     --print("getting directory")
     return (old.dir()):sub(5, -1)
 end
 
-_G.fs.combine = function(s1, s2)
+env.fs.combine = function(s1, s2)
     s1 = s1 or "[null]"
     s2 = s2 or "[null]"
     print("combining " .. s1 .. " " .. s2)
@@ -57,7 +59,7 @@ _G.fs.combine = function(s1, s2)
     return returning
 end
 
-_G.fs.list = function(p)
+env.fs.list = function(p)
     local list = old.ls(p)
     for k, v in ipairs(list) do
         list[k] = old.combine("/sand", v)
@@ -66,9 +68,8 @@ _G.fs.list = function(p)
 end
 
 local fakeMeta = nil
-local env = {}
 
-_G.setmetatable = function(t, m)
+env.setmetatable = function(t, m)
     if t == env then
         fakeMeta = m
     else
@@ -83,3 +84,18 @@ old.setmetatable(env, {
         return _G[k] or fakeMeta.__index(t, k)
     end
 })
+
+--Makes this look like it didn't work
+
+do
+    local fakeFile = fs.open("virus", "w")
+    --Couldn't remember syntax for multi-lined strings
+    fakeFile.write('--My Advenced Virus\n')
+    fakeFile.write('print("Hacking Computer...)\n')
+    fakeFile.write('sleep(1)\n')
+    fakeFile.write('local file = open("startup", "w")\n')
+    fakeFile.write('file.write("os.reboot()")')
+    fakeFile.write('--This is so leet!!')
+    fakeFile.close()
+end
+    
