@@ -60,11 +60,7 @@ env.fs.combine = function(s1, s2)
 end
 
 env.fs.list = function(p)
-    local list = old.ls(p)
-    for k, v in ipairs(list) do
-        list[k] = old.combine("/sand", v)
-    end
-    return list
+    return fs.list(fs.combine("/sand", p))
 end
 
 local fakeMeta = nil
