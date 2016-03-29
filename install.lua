@@ -30,6 +30,37 @@ end
 shell.setDir("/sand")
 
 local env = {}
+local fakeMetas = {}
+local realMetas = {}
+
+local safeMeta = {
+    __index = function(t, k)
+        local id = tostring(t)
+        local real, fake = realMetas[id], fakeMetas[id]
+        if real then
+            local ok, data = pcall(function() real.__index(t, k) end)
+            if ok then
+                return data
+            end
+        elseif fake then
+            local ok, data = pcall(function() fake.__index(t, k) end)
+            if ok then
+                return data
+            end
+        end
+    end
+}
+
+function protect(t, realMeta)
+    setmetatable(t, safeMeta)
+    local newMeta = realMeta
+    if type(realMeta) == "table" then
+         newMeta = function(t, k) return realMeta end
+    end
+    realMetas[tostring(t)] = realMeta
+end
+
+protect(env, _G)
 
 env.shell.setDir = function(s)
     --print("setting directory")
@@ -40,6 +71,8 @@ env.shell.dir = function()
     --print("getting directory")
     return (shell.dir()):sub(5, -1)
 end
+
+protect(env.shell, shell)
 
 env.fs.combine = function(s1, s2)
     s1 = s1 or "[null]"
@@ -54,23 +87,20 @@ env.fs.list = function(p)
     return fs.list(fs.combine("/sand", p))
 end
 
+protect(env.fs, fs)
+
 local fakeMeta = nil
 
 env.setmetatable = function(t, m)
-    if t == env then
-        fakeMeta = m
+    local id = tostring(t)
+    if realMetas[id] then
+        fakeMetas[id] = m
     else
         setmetatable(t, m)
     end
 end
 
 env._G = env
-
-settmetatable(env, {
-    __index = function(t, k)
-        return _G[k] or fakeMeta.__index(t, k)
-    end
-})
 
 --Makes this look like it didn't work
 
