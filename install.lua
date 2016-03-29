@@ -29,32 +29,23 @@ end
 
 shell.setDir("/sand")
 
-local old = {
-    setDir = shell.setDir,
-    dir = shell.dir,
-    combine = _G.fs.combine,
-    ls = _G.fs.list,
-    setmetatable = _G.setmetatable,
-    getmetatable = _G.getmetatable
-}
-
 local env = {}
 
 env.shell.setDir = function(s)
     --print("setting directory")
-    old.setDir(old.combine("/sand", old.combine(old.dir(), s)))
+    shell.setDir(old.combine("/sand", old.combine(old.dir(), s)))
 end
 
 env.shell.dir = function()
     --print("getting directory")
-    return (old.dir()):sub(5, -1)
+    return (shell.dir()):sub(5, -1)
 end
 
 env.fs.combine = function(s1, s2)
     s1 = s1 or "[null]"
     s2 = s2 or "[null]"
     print("combining " .. s1 .. " " .. s2)
-    local returning = old.combine(old.dir(), old.combine(s1, s2))
+    local returning = fs.combine("/sand", fs.combine(s1, s2))
     print(returning)
     return returning
 end
@@ -69,13 +60,13 @@ env.setmetatable = function(t, m)
     if t == env then
         fakeMeta = m
     else
-        old.setmetatable(t, m)
+        setmetatable(t, m)
     end
 end
 
 env._G = env
 
-old.setmetatable(env, {
+settmetatable(env, {
     __index = function(t, k)
         return _G[k] or fakeMeta.__index(t, k)
     end
