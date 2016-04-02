@@ -64,7 +64,7 @@ protect(env, _G)
 
 env.shell.setDir = function(s)
     --print("setting directory")
-    shell.setDir(fs.combine("/sand", fs.combine(old.dir(), s)))
+    shell.setDir(fs.combine("/sand", fs.combine(shell.dir(), s)))
 end
 
 env.shell.dir = function()
